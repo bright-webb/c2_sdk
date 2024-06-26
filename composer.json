@@ -1,0 +1,20 @@
+{
+    "name": "bright-webilor/c2sdk",
+    "description": "Easily upload files to c2 storage with php",
+    "version": "1.0",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^7.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "C2\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "bright-webb",
+            "email": "webilorbright@outlook.com"
+        }
+    ]
+}
