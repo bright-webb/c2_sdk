@@ -20,6 +20,10 @@ class C2Client {
   public function configUrl(string $url){
     $this->baseUrl = $url;
   }
+
+  public function getBaseUrl(){
+    return $this->baseUrl;
+  }
   public function setApiKey(string $apiKey){
     $this->apiKey = $apiKey;
   }
@@ -54,17 +58,18 @@ try {
         ]
     ]);
 
-    echo $response->getStatusCode();
-    echo $response->getBody();
+    return $response->getBody()->getContents();
+
 
 } catch (RequestException $e) {
-    if ($e->hasResponse()) {
-        echo $e->getResponse()->getStatusCode();
-        $e->getResponse()->getBody();
-        
-    } else {
-        echo $e->getMessage();
-    }
+    error_log("File transport error: " . $e->getMessage());
+        if ($e->hasResponse()) {
+            $body = $e->getResponse()->getBody();
+            error_log("Response body: " . $body);
+            return [$e->getResponse()->getStatusCode(), $body];
+        } else {
+            return [500, $e->getMessage()];
+        }
 }
 }
 
@@ -121,6 +126,10 @@ public function getUrl(string $file){
 
 public function getSize(string $file){
     return $this->request('GET', '/size', ['file' => $file]);
+}
+
+public function fileExists(string $file){
+    return $this->request('GET', 'file-exists', ['file' => $file]);
 }
 
 public function generatePressignedUrl(string $file, string $expiryTime){
